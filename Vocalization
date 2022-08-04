@@ -1,0 +1,34 @@
+library(devtools)
+library(seewave)
+library(SoundShape)
+library(tuneR)
+
+# Sample data from SoundShape
+snake <- readWave("Vocalization_Dipsas_semruido.wav")
+plot(snake)
+
+# Select stereotyped acoustic unit from sample
+snake.cut <- seewave::cutw(snake, f=44100, from = 18.5, to= 18.75, output="Wave")
+
+# a) Oscillogram
+seewave::oscillo(snake.cut)
+
+# b) 2D spectrogram
+seewave::spectro(snake.cut, flim=c(0, 15), grid=T, scale=T)
+
+seewave::spectro(snake.cut, flim=c(0, 15), grid=TRUE, scale=TRUE,
+                 osc = TRUE,  wl=400, cexlab = 2, cexaxis = 2)
+
+
+# d) 3D spectrogram - sampled surface
+threeDspectro(snake.cut, flim=c(0, 15), samp.grid=F, 
+              x.length=70, y.length=40, main="", cex.axis = 1, cex.lab = 1,
+              resfac = 5)
+
+meanspec(snake.cut, PSD = TRUE, col = "red", cex = 1, plot = 1,
+         wl = 1024, wn = "hamming", ovlp = 80,
+         flab = "Frequency (kHz)", alab = "Amplitude", type ="l")
+
+soundscapespec(snake.cut, channel = 1, wl = 1024, wn = "hamming", ovlp = 50,
+               plot = TRUE, xlab = "Frequency (kHz)", ylim = c(0, 1))
+
